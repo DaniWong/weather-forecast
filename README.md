@@ -32,3 +32,14 @@ Installs all requirements for the app.
 
 Runs the endpoint.\
 Open [http://localhost:8000/api/v1/weather-forecast/?city=merida](http://localhost:8000/api/v1/weather-forecast/?city=merida) to view it in the browser.
+
+### Real example of the response
+
+![image](https://github.com/DaniWong/weather-forecast/assets/5056497/d29994d6-9254-422f-89ba-48d74a66a4e6)
+
+
+## Additional scripts
+
+### `python manage.py test`
+
+Launches all avilable tests.
