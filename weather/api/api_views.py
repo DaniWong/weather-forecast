@@ -9,6 +9,9 @@ forecast_handler = WeatherForecastHandler()
 
 
 def get_weather_forecast(request):
+    '''
+    I'm not using Rest Framework because this is a simple endpoint.
+    '''
     response = {
         "success": True,
         "data": [],

@@ -5,15 +5,22 @@ from weather.constants import OPEN_WEATHER_API_KEY, OPEN_WEATHER_API_URL, RESERV
 
 
 class OpenWeather():
+    '''
+    Class to consume open weather api. This give only one method to achieve that.
+    '''
 
     def get_forecast_data(self, lat, long, units, exclude=''):
         url = f"{OPEN_WEATHER_API_URL}?lat={lat}&lon={long}&exclude={exclude}&appid={OPEN_WEATHER_API_KEY}&units={units}"
+        print('url', url)
         resp = requests.get(url)
         resp.raise_for_status()
         return resp.json()
     
 
 class ReservamosPlaces():
+    '''
+    Class to get places by city name from reserrvamos api.
+    '''
 
     def get_places(self, city_name):
         url = f"{RESERVAMOS_PLACES_API_URL}?q={city_name}"
@@ -23,12 +30,15 @@ class ReservamosPlaces():
 
 
 class WeatherForecastHandler():
+    '''
+    Class for process the data from open weahter and places services then merge according coordinates of the places.
+    '''
     
     def __init__(self):
         self._open_weather_service = OpenWeather()
         self._reservamos_places_service = ReservamosPlaces()
     
-    def get_forecast_data(self, lat, long):
+    def _get_forecast_data(self, lat, long):
         daily_forecast = []
         success = False
         msg = None
@@ -62,7 +72,7 @@ class WeatherForecastHandler():
         for city in cities:
             lat = city.get("lat")
             long = city.get("long")
-            daily_forecast = self.get_forecast_data(lat, long)
+            daily_forecast = self._get_forecast_data(lat, long)
             response.append({
                 "id": city.get("id"),
                 "city_slug": city.get("city_slug"),

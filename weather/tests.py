@@ -1,3 +1,29 @@
 from django.test import TestCase
 
-# Create your tests here.
+from unittest.mock import patch
+
+from weather.services import WeatherForecastHandler
+
+class WeatherForecastTestCase(TestCase):
+
+    def setUp(self):
+        pass
+
+    @patch("weather.services.ReservamosPlaces")
+    @patch("weather.services.OpenWeather")
+    def test_weather_forecast_api(self, mock_open_weather, mock_places):
+        places = [
+            {'id': 8364, 'slug': 'merida', 'city_slug': 'merida', 'display': 'Mérida', 'ascii_display': 'merida', 'city_name': 'Mérida', 'city_ascii_name': 'merida', 'state': 'Yucatán', 'country': 'México', 'lat': '20.9673702', 'long': '-89.5925857', 'result_type': 'city', 'popularity': '0.0260748784645495', 'sort_criteria': 0.6104299513858198},
+            {'id': 8928, 'slug': 'mid', 'city_slug': 'merida', 'display': 'Licenciado Manuel Crescencio Rejon Int', 'ascii_display': 'Licenciado Manuel Crescencio Rejon Int', 'city_name': 'Mérida', 'city_ascii_name': 'merida', 'state': 'Yucatán', 'country': 'México', 'lat': '20.936981', 'long': '-89.657672', 'result_type': 'airport', 'popularity': '0.003911231769682425', 'sort_criteria': 0.6015644927078729},
+            {'id': 10575, 'slug': 't-merida-ado-fiesta-americana', 'city_slug': 'merida', 'display': 'Fiesta Americana-Merida', 'ascii_display': 'fiesta americana-merida', 'city_name': 'Mérida', 'city_ascii_name': 'merida', 'state': 'Yucatán', 'country': 'México', 'lat': '20.9865067797168', 'long': '-89.61917299780885', 'result_type': 'terminal', 'popularity': '0.003911231769682425', 'sort_criteria': 0.6015644927078729}
+        ]
+        open_weather = {"lat":20.9674,"lon":-89.5926,"timezone":"America/Merida","timezone_offset":-21600,"daily":[{"dt":1710266400,"sunrise":1710245350,"sunset":1710288416,"moonrise":1710251220,"moonset":1710298140,"moon_phase":0.09,"temp":{"day":32.41,"min":20.36,"max":32.41,"night":24.29,"eve":27.17,"morn":20.36},"feels_like":{"day":34.63,"night":24.58,"eve":28.54,"morn":20.85},"pressure":1017,"humidity":48,"dew_point":19.99,"wind_speed":5.32,"wind_deg":55,"wind_gust":10.12,"weather":[{"id":803,"main":"Clouds","description":"broken clouds","icon":"04d"}],"clouds":60,"pop":0,"uvi":11.3},{"dt":1710352800,"sunrise":1710331697,"sunset":1710374835,"moonrise":1710340080,"moonset":1710388320,"moon_phase":0.13,"temp":{"day":35.29,"min":20.23,"max":37.54,"night":25.85,"eve":29.27,"morn":20.23},"feels_like":{"day":34.48,"night":26.14,"eve":30.02,"morn":20.89},"pressure":1012,"humidity":27,"dew_point":13.36,"wind_speed":5.26,"wind_deg":125,"wind_gust":12.96,"weather":[{"id":802,"main":"Clouds","description":"scattered clouds","icon":"03d"}],"clouds":35,"pop":0,"uvi":11.49},{"dt":1710439200,"sunrise":1710418043,"sunset":1710461254,"moonrise":1710429120,"moonset":1710478560,"moon_phase":0.17,"temp":{"day":36.34,"min":21.81,"max":38.48,"night":24.68,"eve":33.07,"morn":21.94},"feels_like":{"day":35.31,"night":25.01,"eve":31.81,"morn":22.67},"pressure":1011,"humidity":24,"dew_point":12.43,"wind_speed":7.06,"wind_deg":140,"wind_gust":13.68,"weather":[{"id":803,"main":"Clouds","description":"broken clouds","icon":"04d"}],"clouds":80,"pop":0,"uvi":11.56},{"dt":1710525600,"sunrise":1710504389,"sunset":1710547672,"moonrise":1710518400,"moonset":1710568680,"moon_phase":0.2,"temp":{"day":36.82,"min":23.65,"max":38.56,"night":27.83,"eve":33.9,"morn":25.71},"feels_like":{"day":36.18,"night":28.61,"eve":33.15,"morn":26.22},"pressure":1010,"humidity":25,"dew_point":13.92,"wind_speed":7.14,"wind_deg":134,"wind_gust":13.1,"weather":[{"id":803,"main":"Clouds","description":"broken clouds","icon":"04d"}],"clouds":69,"pop":0,"uvi":11.08},{"dt":1710612000,"sunrise":1710590734,"sunset":1710634091,"moonrise":1710607920,"moonset":0,"moon_phase":0.25,"temp":{"day":35.93,"min":22.92,"max":38.57,"night":27.85,"eve":31.8,"morn":24.01},"feels_like":{"day":36.83,"night":28.2,"eve":32.53,"morn":24.58},"pressure":1010,"humidity":33,"dew_point":17.44,"wind_speed":5.78,"wind_deg":147,"wind_gust":13,"weather":[{"id":804,"main":"Clouds","description":"overcast clouds","icon":"04d"}],"clouds":94,"pop":0,"uvi":12},{"dt":1710698400,"sunrise":1710677080,"sunset":1710720509,"moonrise":1710697620,"moonset":1710658680,"moon_phase":0.27,"temp":{"day":36.79,"min":23.03,"max":39.62,"night":28.61,"eve":28.94,"morn":23.03},"feels_like":{"day":37.7,"night":29.87,"eve":31.08,"morn":23.82},"pressure":1008,"humidity":31,"dew_point":17.35,"wind_speed":5.87,"wind_deg":144,"wind_gust":12.37,"weather":[{"id":801,"main":"Clouds","description":"few clouds","icon":"02d"}],"clouds":16,"pop":0,"uvi":12},{"dt":1710784800,"sunrise":1710763425,"sunset":1710806927,"moonrise":1710787440,"moonset":1710748380,"moon_phase":0.3,"temp":{"day":37.23,"min":22.96,"max":37.23,"night":25.09,"eve":27.67,"morn":22.96},"feels_like":{"day":39.09,"night":25.87,"eve":30.04,"morn":23.74},"pressure":1010,"humidity":33,"dew_point":18.27,"wind_speed":5.78,"wind_deg":346,"wind_gust":12.53,"weather":[{"id":801,"main":"Clouds","description":"few clouds","icon":"02d"}],"clouds":17,"pop":0,"uvi":12},{"dt":1710871200,"sunrise":1710849770,"sunset":1710893345,"moonrise":1710877200,"moonset":1710837660,"moon_phase":0.33,"temp":{"day":36.37,"min":22.17,"max":36.37,"night":26.35,"eve":27.11,"morn":22.17},"feels_like":{"day":36.74,"night":26.35,"eve":28.78,"morn":22.95},"pressure":1013,"humidity":30,"dew_point":16.2,"wind_speed":6.3,"wind_deg":18,"wind_gust":12.23,"weather":[{"id":800,"main":"Clear","description":"clear sky","icon":"01d"}],"clouds":7,"pop":0,"uvi":12}]}
+        mock_open_weather.return_value.get_forecast_data.return_value = open_weather
+        mock_places.return_value.get_places.return_value = places
+        city_name = "merida"
+        weather_forecast = WeatherForecastHandler()
+        response = weather_forecast.get(city_name)
+        merida_city_forecast = response[0]
+        self.assertEqual(merida_city_forecast.get("city_slug"), city_name)
+        self.assertTrue(merida_city_forecast.get("daily_forecast").get("success"))
+        self.assertEqual(len(merida_city_forecast.get("daily_forecast").get("data")), 7)
